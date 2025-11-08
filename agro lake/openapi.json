@@ -1,0 +1,489 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Seagri Agricultural API",
+    "description": "API para gerenciamento de dados agrícolas - agricultores e propriedades",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Seagri Server",
+      "email": "support@seagri.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3658/m1/1120850-1112026-default/",
+      "description": "Servidor Mock Apidog (Desenvolvimento)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Properties",
+      "description": "Endpoints para gerenciamento de propriedades agrícolas"
+    },
+    {
+      "name": "Farmers",
+      "description": "Endpoints para gerenciamento de agricultores"
+    }
+  ],
+  "paths": {
+    "/api/properties": {
+      "get": {
+        "tags": ["Properties"],
+        "summary": "Listar Propriedades",
+        "description": "Lista todas as propriedades agrícolas cadastradas",
+        "operationId": "listProperties",
+        "responses": {
+          "200": {
+            "description": "Lista de propriedades retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Properties"],
+        "summary": "Criar Propriedade",
+        "description": "Cria uma nova propriedade agrícola no sistema",
+        "operationId": "createProperty",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropertyCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Propriedade criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/properties/{id}": {
+      "get": {
+        "tags": ["Properties"],
+        "summary": "Obter Propriedade",
+        "description": "Obtém detalhes de uma propriedade específica",
+        "operationId": "getProperty",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da propriedade",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Propriedade retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Propriedade não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/farmers/{id}": {
+      "get": {
+        "tags": ["Farmers"],
+        "summary": "Obter dados do agricultor",
+        "description": "Obtém dados completos de um agricultor específico",
+        "operationId": "getFarmer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do agricultor",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agricultor retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Farmer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Agricultor não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/farmers/{id}/properties": {
+      "get": {
+        "tags": ["Farmers", "Properties"],
+        "summary": "Listar propriedades do agricultor",
+        "description": "Lista todas as propriedades de um agricultor específico",
+        "operationId": "getFarmerProperties",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do agricultor",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de propriedades do agricultor retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Agricultor não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgriculturalData": {
+        "type": "object",
+        "description": "Modelo base para dados agrícolas",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID único do item",
+            "example": "prop_1"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do item",
+            "example": "Fazenda São João"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição adicional",
+            "example": "Propriedade localizada na região de Goiás"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de última atualização",
+            "example": "2024-01-20T14:45:00Z"
+          }
+        },
+        "required": ["name"]
+      },
+      "Farmer": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AgriculturalData"
+          },
+          {
+            "type": "object",
+            "description": "Modelo para agricultor",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do agricultor",
+                "example": "João Silva"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Email do agricultor",
+                "example": "joao.silva@email.com"
+              },
+              "phone": {
+                "type": "string",
+                "description": "Telefone do agricultor",
+                "example": "+55 62 99999-9999"
+              },
+              "cpf_cnpj": {
+                "type": "string",
+                "description": "CPF ou CNPJ do agricultor",
+                "example": "123.456.789-00"
+              },
+              "address": {
+                "type": "string",
+                "description": "Endereço do agricultor",
+                "example": "Rua das Flores, 123"
+              },
+              "city": {
+                "type": "string",
+                "description": "Cidade",
+                "example": "Goiânia"
+              },
+              "state": {
+                "type": "string",
+                "description": "Estado",
+                "example": "GO"
+              },
+              "zip_code": {
+                "type": "string",
+                "description": "CEP",
+                "example": "74000-000"
+              }
+            },
+            "required": ["name"]
+          }
+        ]
+      },
+      "Property": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AgriculturalData"
+          },
+          {
+            "type": "object",
+            "description": "Modelo para propriedade agrícola",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome da propriedade",
+                "example": "Fazenda São João"
+              },
+              "location": {
+                "type": "string",
+                "description": "Localização da propriedade",
+                "example": "Goiás, Brasil"
+              },
+              "area_hectares": {
+                "type": "number",
+                "format": "float",
+                "description": "Área em hectares",
+                "example": 150.5
+              },
+              "farmer_id": {
+                "type": "string",
+                "description": "ID do agricultor proprietário",
+                "example": "farmer_1"
+              },
+              "owner": {
+                "type": "string",
+                "description": "Proprietário (legado - usar farmer_id)",
+                "example": "João Silva"
+              },
+              "coordinates": {
+                "type": "object",
+                "description": "Coordenadas GPS",
+                "properties": {
+                  "latitude": {
+                    "type": "number",
+                    "format": "float",
+                    "example": -15.7942
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "format": "float",
+                    "example": -47.8822
+                  }
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        ]
+      },
+      "PropertyCreate": {
+        "type": "object",
+        "description": "Dados para criação de propriedade",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome da propriedade (obrigatório)",
+            "example": "Fazenda São João"
+          },
+          "location": {
+            "type": "string",
+            "description": "Localização da propriedade",
+            "example": "Goiás, Brasil"
+          },
+          "area_hectares": {
+            "type": "number",
+            "format": "float",
+            "description": "Área em hectares",
+            "example": 150.5
+          },
+          "farmer_id": {
+            "type": "string",
+            "description": "ID do agricultor proprietário (preferencial sobre owner)",
+            "example": "farmer_1"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Proprietário (legado - usar farmer_id)",
+            "example": "João Silva"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição adicional",
+            "example": "Propriedade localizada na região de Goiás"
+          }
+        },
+        "required": ["name"]
+      },
+      "Error": {
+        "type": "object",
+        "description": "Modelo de erro da API",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Mensagem de erro",
+            "example": "Propriedade não encontrada"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status do erro",
+            "example": "error"
+          },
+          "status_code": {
+            "type": "integer",
+            "description": "Código HTTP de status",
+            "example": 404
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token de autenticação do Apidog"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
+
